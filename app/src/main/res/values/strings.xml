@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Unshaky</string>
+    <string name="test"> Harry Potter is a series of fantasy novels written by British author J. K. Rowling. The novels chronicle the life of a young wizard, Harry Potter,\n
+                         and his friends Hermione Granger and Ron Weasley, all of whom are students at Hogwarts School of Witchcraft and Wizardry. The main story arc concerns\n
+                         Harrys struggle against Lord Voldemort, a dark wizard who intends to become immortal, overthrow the wizard governing body known as the Ministry of Magic,\n
+                         and subjugate all wizards and muggles, a reference term that means non-magical people\n </string>
 </resources>
