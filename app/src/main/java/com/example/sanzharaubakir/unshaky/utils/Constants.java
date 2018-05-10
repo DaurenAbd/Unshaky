@@ -1,11 +1,10 @@
-package com.example.sanzharaubakir.unshaky.Utilities;
+package com.example.sanzharaubakir.unshaky.utils;
 
 /**
  * Created by sanzharaubakir on 20.04.18.
  */
 
-public class Constants
-{
+public class Constants {
     public static final float NS2S = 1.0f / 1000000000.0f;
     public static final float MAX_ACC = 5.0f;
     public static final float MAX_POS_SHIFT = 100.0f;
