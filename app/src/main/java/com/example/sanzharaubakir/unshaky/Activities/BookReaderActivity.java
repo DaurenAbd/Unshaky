@@ -1,4 +1,4 @@
-package com.example.sanzharaubakir.unshaky;
+package com.example.sanzharaubakir.unshaky.Activities;
 
 import android.app.Activity;
 import android.hardware.SensorManager;
@@ -8,13 +8,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.sanzharaubakir.unshaky.R;
 import com.example.sanzharaubakir.unshaky.sensor.Accelerometer;
 import com.example.sanzharaubakir.unshaky.sensor.AccelerometerListener;
 
 import org.jetbrains.annotations.NotNull;
 
-public class MainActivity extends Activity implements AccelerometerListener {
-    private static final String TAG = MainActivity.class.getSimpleName();
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
+
+import nl.siegmann.epublib.domain.Book;
+import nl.siegmann.epublib.epub.EpubReader;
+
+public class BookReaderActivity extends Activity implements AccelerometerListener {
+    private static final String TAG = BookReaderActivity.class.getSimpleName();
 
     private View layoutSensor;
 
@@ -24,7 +33,21 @@ public class MainActivity extends Activity implements AccelerometerListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        try {
+            EpubReader epubReader = new EpubReader();
+            Book book = epubReader.readEpub(new FileInputStream("mybook.epub"));
+
+            List<String> titles = book.getMetadata().getTitles();
+            System.out.println("book title:" + (titles.isEmpty() ? "book has no title" : titles.get(0)));
+
+        }
+        catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+        setContentView(R.layout.reading_view);
 
         initViews();
 
@@ -32,7 +55,6 @@ public class MainActivity extends Activity implements AccelerometerListener {
         accelerometer = new Accelerometer(sensorManager);
         accelerometer.setListener(this);
     }
-
     @Override
     protected void onResume() {
         super.onResume();
