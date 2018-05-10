@@ -1,7 +1,6 @@
 package com.example.sanzharaubakir.unshaky;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
