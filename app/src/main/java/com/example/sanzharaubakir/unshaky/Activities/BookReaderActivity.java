@@ -1,8 +1,10 @@
 package com.example.sanzharaubakir.unshaky.Activities;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.example.sanzharaubakir.unshaky.R;
@@ -30,9 +32,13 @@ public class BookReaderActivity extends Activity implements AccelerometerListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Resources resources = getResources();
+        Bundle bundle = getIntent().getBundleExtra(resources.getString(R.string.arguments));
+        String uri = bundle.getString(resources.getString(R.string.book_uri));
+        Log.d(TAG, uri);
         try {
             EpubReader epubReader = new EpubReader();
-            Book book = epubReader.readEpub(new FileInputStream("mybook.epub"));
+            Book book = epubReader.readEpub(new FileInputStream(uri));
 
             List<String> titles = book.getMetadata().getTitles();
             System.out.println("book title:" + (titles.isEmpty() ? "book has no title" : titles.get(0)));

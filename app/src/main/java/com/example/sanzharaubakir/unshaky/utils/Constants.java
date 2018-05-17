@@ -14,4 +14,6 @@ public class Constants {
 
     public static final float VELOCITY_FRICTION_DEFAULT = 0.2f;
     public static final float POSITION_FRICTION_DEFAULT = 0.1f;
+    public static final int REQUEST_BROWSE = 1;
+    public static final int READ_BOOK = 2;
 }

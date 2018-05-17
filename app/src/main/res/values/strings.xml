@@ -4,4 +4,13 @@
                          and his friends Hermione Granger and Ron Weasley, all of whom are students at Hogwarts School of Witchcraft and Wizardry. The main story arc concerns\n
                          Harrys struggle against Lord Voldemort, a dark wizard who intends to become immortal, overthrow the wizard governing body known as the Ministry of Magic,\n
                          and subjugate all wizards and muggles, a reference term that means non-magical people\n </string>
+    <string name="drawer_open">Drawer opened</string>
+    <string name="drawer_close">Drawer closed</string>
+    <string-array name="screen_array">
+        <item>Recent books</item>
+        <item>SD card</item>
+    </string-array>
+    <string name="recent_books">Recent books</string>
+    <string name="book_uri">book_uri</string>
+    <string name="arguments">arguments</string>
 </resources>
