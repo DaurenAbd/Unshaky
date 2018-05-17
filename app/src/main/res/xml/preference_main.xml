@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="pref_velocity_ampl"
+        android:title="@string/pref_velocity_ampl"
+        android:summary="@string/pref_velocity_ampl_sum"
+        android:defaultValue="@string/pref_velocity_ampl_def"
+        android:inputType="numberDecimal"/>
+
+    <EditTextPreference
+        android:key="pref_velocity_fric"
+        android:title="@string/pref_velocity_fric"
+        android:summary="@string/pref_velocity_fric_sum"
+        android:defaultValue="@string/pref_velocity_fric_def"
+        android:inputType="numberDecimal"/>
+
+    <EditTextPreference
+        android:key="pref_position_ampl"
+        android:title="@string/pref_position_ampl"
+        android:summary="@string/pref_position_ampl_sum"
+        android:defaultValue="@string/pref_position_ampl_def"
+        android:inputType="numberDecimal"/>
+
+</PreferenceScreen>

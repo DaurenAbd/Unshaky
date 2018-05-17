@@ -13,4 +13,13 @@
     <string name="recent_books">Recent books</string>
     <string name="book_uri">book_uri</string>
     <string name="arguments">arguments</string>
+    <string name="pref_velocity_ampl">Velocity Amplification</string>
+    <string name="pref_velocity_ampl_sum">Proportional coefficient of velocity for calculating position</string>
+    <string name="pref_velocity_ampl_def">10000</string>
+    <string name="pref_velocity_fric">Velocity Friction</string>
+    <string name="pref_velocity_fric_sum">Resistance of velocity to to changed caused by acceleration</string>
+    <string name="pref_velocity_fric_def">0.2</string>
+    <string name="pref_position_ampl">Position Friction</string>
+    <string name="pref_position_ampl_sum">Resistance of postition to changed caused by velocity</string>
+    <string name="pref_position_ampl_def">0.1</string>
 </resources>

@@ -38,7 +38,7 @@ public class BookReaderActivity extends Activity implements AccelerometerListene
         Log.d(TAG, uri);
         try {
             EpubReader epubReader = new EpubReader();
-            Book book = epubReader.readEpub(new FileInputStream(uri));
+            Book book = epubReader.readEpub(new FileInputStream("mybook.epub"));
 
             List<String> titles = book.getMetadata().getTitles();
             System.out.println("book title:" + (titles.isEmpty() ? "book has no title" : titles.get(0)));
