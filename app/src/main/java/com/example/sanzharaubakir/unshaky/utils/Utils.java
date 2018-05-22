@@ -1,5 +1,9 @@
 package com.example.sanzharaubakir.unshaky.utils;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
+
 /**
  * Created by sanzharaubakir on 20.04.18.
  */
@@ -27,5 +31,13 @@ public class Utils {
             return 0;
         }
         return value;
+    }
+
+    public static boolean checkPermission(Context context, String permission){
+        if (ContextCompat.checkSelfPermission(context, permission)
+                != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        }
+        return true;
     }
 }

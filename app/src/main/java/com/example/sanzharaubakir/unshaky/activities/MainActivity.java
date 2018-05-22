@@ -1,4 +1,4 @@
-package com.example.sanzharaubakir.unshaky.Activities;
+package com.example.sanzharaubakir.unshaky.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -11,8 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.example.sanzharaubakir.unshaky.Fragments.RecentBooksFragment;
 import com.example.sanzharaubakir.unshaky.R;
+import com.example.sanzharaubakir.unshaky.fragments.RecentBooksFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -20,8 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private FragmentManager fragmentManager;
     private Fragment currentFragment;
-    Class currentFragmentClass;
-
+    private Class currentFragmentClass;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
