@@ -4,5 +4,8 @@
         <item
             android:id="@+id/recent_books"
             android:title="@string/recent_books" />
+        <item
+            android:id="@+id/sd_browising"
+            android:title="@string/sd_browse" />
     </group>
 </menu>

@@ -6,7 +6,7 @@ android {
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.example.sanzharaubakir.unshaky"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -38,6 +38,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.github.mertakdut:EpubParser:1.0.95'
+    implementation 'com.google.code.gson:gson:2.4'
 }
 repositories {
     mavenCentral()

@@ -13,12 +13,15 @@ import com.example.sanzharaubakir.unshaky.R;
 import com.example.sanzharaubakir.unshaky.sensor.Accelerometer;
 import com.example.sanzharaubakir.unshaky.sensor.AccelerometerListener;
 import com.example.sanzharaubakir.unshaky.utils.OnSwipeTouchListener;
+import com.example.sanzharaubakir.unshaky.utils.TinyDB;
 import com.github.mertakdut.BookSection;
 import com.github.mertakdut.Reader;
 import com.github.mertakdut.exception.OutOfPagesException;
 import com.github.mertakdut.exception.ReadingException;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 
 public class BookReaderActivity extends Activity implements AccelerometerListener {
     private static final String TAG = BookReaderActivity.class.getSimpleName();
@@ -40,28 +43,8 @@ public class BookReaderActivity extends Activity implements AccelerometerListene
         Resources resources = getResources();
         Bundle bundle = getIntent().getBundleExtra(resources.getString(R.string.arguments));
         String uri = bundle.getString(resources.getString(R.string.book_uri));
-        Log.d(TAG,"book uri:" +uri);
         bookUri = uri;
-        /*try {
-            EpubReader epubReader = new EpubReader();
-            Book book = epubReader.readEpub(new FileInputStream("mybook.epub"));
-
-            //List<String> titles = book.getMetadata().getTitles();
-            //System.out.println("book title:" + (titles.isEmpty() ? "book has no title" : titles.get(0)));
-            List<Resource> bookResources = book.getContents();
-
-
-        }
-        catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }*/
-
-        //String sectionContent = bookSection.getSectionContent(); // Returns content as html.
-        //String sectionTextContent = bookSection.getSectionTextContent(); // Excludes html tags.
-
+        saveUri(bookUri);
         textView = (TextView) findViewById(R.id.txt_test);
         textView.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
             public void onSwipeRight() {
@@ -90,6 +73,21 @@ public class BookReaderActivity extends Activity implements AccelerometerListene
         accelerometer = new Accelerometer(sensorManager);
         accelerometer.setListener(this);
     }
+
+    private void saveUri(String bookUri) {
+        TinyDB tinyDB = new TinyDB(getApplicationContext());
+        Resources resources = getResources();
+        ArrayList<String> savedBooks = tinyDB.getListString(resources.getString(R.string.saved_books_uris));
+        for (String uri : savedBooks){
+            if (uri.equals(bookUri)){
+                return;
+            }
+        }
+        savedBooks.add(bookUri);
+        tinyDB.putListString(resources.getString(R.string.saved_books_uris), savedBooks);
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

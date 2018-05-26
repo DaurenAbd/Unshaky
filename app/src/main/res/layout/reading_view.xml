@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f9cb69"
     tools:context="com.example.sanzharaubakir.unshaky.activities.MainActivity">
 
     <FrameLayout
@@ -17,14 +18,13 @@
             android:layout_height="match_parent"
             android:layout_margin="20dp"
             android:orientation="vertical"
-            android:background="#f9f04e">
+            android:background="#f9cb69">
 
             <TextView
                 android:id="@+id/txt_test"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="@string/test"/>
+                android:textSize="15sp"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

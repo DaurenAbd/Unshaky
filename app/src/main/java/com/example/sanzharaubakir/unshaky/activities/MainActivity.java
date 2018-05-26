@@ -2,7 +2,6 @@ package com.example.sanzharaubakir.unshaky.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,14 +11,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.sanzharaubakir.unshaky.R;
+import com.example.sanzharaubakir.unshaky.fragments.BookFragment;
 import com.example.sanzharaubakir.unshaky.fragments.RecentBooksFragment;
+import com.example.sanzharaubakir.unshaky.fragments.SDBooksFragment;
 
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private DrawerLayout mDrawerLayout;
     private FragmentManager fragmentManager;
-    private Fragment currentFragment;
+    private BookFragment currentFragment;
     private Class currentFragmentClass;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,10 +47,16 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 currentFragmentClass = RecentBooksFragment.class;
                                 break;
+                            case R.id.sd_browising:
+                                if (currentFragmentClass != null && currentFragmentClass == SDBooksFragment.class){
+                                    break;
+                                }
+                                currentFragmentClass = SDBooksFragment.class;
+                                break;
                         }
 
                         try {
-                            currentFragment = (Fragment) currentFragmentClass.newInstance();
+                            currentFragment = (BookFragment) currentFragmentClass.newInstance();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -64,11 +71,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         try {
-            currentFragment = (Fragment) (RecentBooksFragment.class).newInstance();
+            currentFragment =  (SDBooksFragment.class).newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        currentFragmentClass = RecentBooksFragment.class;
+        currentFragmentClass = SDBooksFragment.class;
         // TODO highligh menuitem
         fragmentManager.beginTransaction().replace(R.id.content_frame, currentFragment).commit();
 
