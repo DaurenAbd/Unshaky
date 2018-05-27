@@ -8,6 +8,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.sanzharaubakir.unshaky.R;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private BookFragment currentFragment;
     private Class currentFragmentClass;
+    private Menu menu;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,18 +79,21 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         currentFragmentClass = SDBooksFragment.class;
-        // TODO highligh menuitem
         fragmentManager.beginTransaction().replace(R.id.content_frame, currentFragment).commit();
+        if (menu != null){
+            menu.findItem(R.id.sd_browising).setChecked(true);
+        }
 
     }
 
-    /*@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu;
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
+        inflater.inflate(R.menu.drawer_menu, menu);
+        this.menu = menu;
         return super.onCreateOptionsMenu(menu);
-    }*/
+    }
 
     /* Called whenever we call invalidateOptionsMenu() */
     /*@Override
