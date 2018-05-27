@@ -2,11 +2,13 @@ package com.example.sanzharaubakir.unshaky.activities;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,18 +23,23 @@ import com.github.mertakdut.exception.ReadingException;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import nl.siegmann.epublib.domain.Book;
+import nl.siegmann.epublib.epub.EpubReader;
+
 public class BookReaderActivity extends Activity implements AccelerometerListener {
     private static final String TAG = BookReaderActivity.class.getSimpleName();
 
     private View layoutSensor;
     private TextView textView;
+    private ImageView coverImageView;
     private SensorManager sensorManager;
     private Accelerometer accelerometer;
     private String text;
     private int page = 0;
     private String bookUri;
-    private Button prevPage;
-    private Button nextPage;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,33 +51,45 @@ public class BookReaderActivity extends Activity implements AccelerometerListene
         bookUri = uri;
         RelativeLayout frameLayout = findViewById(R.id.reading_view_layout);
         textView = (TextView) findViewById(R.id.txt_test);
-
+        coverImageView = (ImageView) findViewById(R.id.cover_image);
+        //readPage(0);
+        showCoverImage();
         frameLayout.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
             public void onSwipeRight() {
-                readNextPage();
+                //cnt++;
+                //textView.setText(String.valueOf(cnt));
+                //readNextPage();
+                readPrevPage();
             }
             public void onSwipeLeft() {
-                readPrevPage();
-            }
-
-        });
-        prevPage = (Button) findViewById(R.id.prev_page);
-        prevPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                readPrevPage();
-            }
-        });
-        nextPage = (Button) findViewById(R.id.next_page);
-        nextPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                //cnt--;
+                //textView.setText(String.valueOf(cnt));
+                //readPrevPage();
                 readNextPage();
             }
+
         });
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelerometer = new Accelerometer(sensorManager);
         accelerometer.setListener(this);
+    }
+
+    private void showCoverImage() {
+        try {
+            EpubReader epubReader = new EpubReader();
+            Book book = epubReader.readEpub(new FileInputStream(bookUri));
+
+            byte[] array = book.getCoverImage().getData();
+            Bitmap bitmap = BitmapFactory.decodeByteArray(array, 0, array.length);
+            coverImageView.setImageBitmap(bitmap);
+            if (textView.getVisibility() == View.VISIBLE){
+                textView.setVisibility(View.GONE);
+                coverImageView.setVisibility(View.VISIBLE);
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -111,7 +130,13 @@ public class BookReaderActivity extends Activity implements AccelerometerListene
     }
     public void readPrevPage(){
         Log.d(TAG, "reading prev page");
-        readPage(page);
+        if (page > 0) {
+            page--;
+            readPage(page);
+        }
+        else{
+            showCoverImage();
+        }
 
     }
     public void readPage(int pageToRead){
@@ -132,6 +157,10 @@ public class BookReaderActivity extends Activity implements AccelerometerListene
                 String sectionTextContent = bookSection.getSectionTextContent(); // Excludes html tags.
                 text = sectionTextContent;
                 textView.setText(sectionTextContent);
+                if (coverImageView.getVisibility() == View.VISIBLE){
+                    coverImageView.setVisibility(View.GONE);
+                    textView.setVisibility(View.VISIBLE);
+                }
                 page = pageToRead;
             } catch (ReadingException e) {
                 e.printStackTrace();
