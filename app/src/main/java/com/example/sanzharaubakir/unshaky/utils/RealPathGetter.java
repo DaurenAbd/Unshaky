@@ -74,7 +74,7 @@ public class RealPathGetter {
             return uri.getPath();
         }
 
-        return null;
+        return String.valueOf(uri);
     }
     /**
      * @param uri The Uri to check.

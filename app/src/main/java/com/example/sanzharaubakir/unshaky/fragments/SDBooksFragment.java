@@ -42,7 +42,7 @@ public class SDBooksFragment extends BookFragment implements View.OnClickListene
                 }
                 else {
                     ActivityCompat.requestPermissions(getActivity(),
-                            new String[]{Manifest.permission.READ_CONTACTS},
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                             PERMISSION_REQUEST);
 
                 }

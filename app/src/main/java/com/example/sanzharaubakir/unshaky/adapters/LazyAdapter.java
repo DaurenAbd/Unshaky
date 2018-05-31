@@ -1,4 +1,4 @@
-package com.example.sanzharaubakir.unshaky.utils;
+package com.example.sanzharaubakir.unshaky.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -61,9 +61,11 @@ public class LazyAdapter extends BaseAdapter {
             List<String> titles = book.getMetadata().getTitles();
             String bookTitle = (titles.isEmpty() ? "No title" : titles.get(0));
             title.setText(bookTitle);
-            byte [] array = book.getCoverImage().getData();
-            Bitmap bitmap = BitmapFactory.decodeByteArray(array, 0, array.length);
-            thumb_image.setImageBitmap(bitmap);
+            if (book.getCoverImage() != null && book.getCoverImage().getData() != null){
+                byte [] array = book.getCoverImage().getData();
+                Bitmap bitmap = BitmapFactory.decodeByteArray(array, 0, array.length);
+                thumb_image.setImageBitmap(bitmap);
+            }
         }
         catch (FileNotFoundException e){
             e.printStackTrace();

@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.example.sanzharaubakir.unshaky.R;
 import com.example.sanzharaubakir.unshaky.sensor.Accelerometer;
 import com.example.sanzharaubakir.unshaky.sensor.AccelerometerListener;
-import com.example.sanzharaubakir.unshaky.utils.OnSwipeTouchListener;
+import com.example.sanzharaubakir.unshaky.listeners.OnSwipeTouchListener;
 import com.github.mertakdut.BookSection;
 import com.github.mertakdut.Reader;
 import com.github.mertakdut.exception.OutOfPagesException;
@@ -52,33 +52,32 @@ public class BookReaderActivity extends Activity implements AccelerometerListene
         RelativeLayout frameLayout = findViewById(R.id.reading_view_layout);
         textView = (TextView) findViewById(R.id.txt_test);
         coverImageView = (ImageView) findViewById(R.id.cover_image);
-        //readPage(0);
-        showCoverImage();
+        if (!showCoverImage()){
+            readPage(0);
+        }
         frameLayout.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
             public void onSwipeRight() {
-                //cnt++;
-                //textView.setText(String.valueOf(cnt));
-                //readNextPage();
                 readPrevPage();
             }
             public void onSwipeLeft() {
-                //cnt--;
-                //textView.setText(String.valueOf(cnt));
-                //readPrevPage();
                 readNextPage();
             }
 
         });
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        accelerometer = new Accelerometer(sensorManager);
-        accelerometer.setListener(this);
+        if (sensorManager != null) {
+            accelerometer = new Accelerometer(sensorManager);
+            accelerometer.setListener(this);
+        }
     }
 
-    private void showCoverImage() {
+    private boolean showCoverImage() {
         try {
             EpubReader epubReader = new EpubReader();
             Book book = epubReader.readEpub(new FileInputStream(bookUri));
-
+            if (book.getCoverImage() == null || book.getCoverImage().getData() == null){
+                return false;
+            }
             byte[] array = book.getCoverImage().getData();
             Bitmap bitmap = BitmapFactory.decodeByteArray(array, 0, array.length);
             coverImageView.setImageBitmap(bitmap);
@@ -89,7 +88,9 @@ public class BookReaderActivity extends Activity implements AccelerometerListene
         }
         catch (IOException e){
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     @Override

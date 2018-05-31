@@ -74,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         try {
-            currentFragment =  (SDBooksFragment.class).newInstance();
+            currentFragment =  (RecentBooksFragment.class).newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        currentFragmentClass = SDBooksFragment.class;
+        currentFragmentClass = RecentBooksFragment.class;
         fragmentManager.beginTransaction().replace(R.id.content_frame, currentFragment).commit();
         if (menu != null){
             menu.findItem(R.id.sd_browising).setChecked(true);

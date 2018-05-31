@@ -1,4 +1,4 @@
-package com.example.sanzharaubakir.unshaky.utils;
+package com.example.sanzharaubakir.unshaky.listeners;
 
 import android.content.Context;
 import android.util.Log;
