@@ -13,9 +13,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.sanzharaubakir.unshaky.R;
-import com.example.sanzharaubakir.unshaky.sensor.Accelerometer;
-import com.example.sanzharaubakir.unshaky.sensor.AccelerometerListener;
 import com.example.sanzharaubakir.unshaky.listeners.OnSwipeTouchListener;
+import com.example.sanzharaubakir.unshaky.models.Model;
+import com.example.sanzharaubakir.unshaky.models.ModelListener;
+import com.example.sanzharaubakir.unshaky.models.hmm.HiddenMarkovModel;
+import com.example.sanzharaubakir.unshaky.models.sensor.Accelerometer;
 import com.github.mertakdut.BookSection;
 import com.github.mertakdut.Reader;
 import com.github.mertakdut.exception.OutOfPagesException;
@@ -25,21 +27,27 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.epub.EpubReader;
 
-public class BookReaderActivity extends Activity implements AccelerometerListener {
+public class BookReaderActivity extends Activity implements ModelListener {
     private static final String TAG = BookReaderActivity.class.getSimpleName();
 
     private View layoutSensor;
     private TextView textView;
     private ImageView coverImageView;
     private SensorManager sensorManager;
-    private Accelerometer accelerometer;
+
+    private Model springDumper;
+    private Model hiddenMarkovModel;
+    private List<Model> modelList = new ArrayList();
+
     private String text;
     private int page = 0;
-    private String bookUri;
+    private String bookUri, modelType;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +56,9 @@ public class BookReaderActivity extends Activity implements AccelerometerListene
         Resources resources = getResources();
         Bundle bundle = getIntent().getBundleExtra(resources.getString(R.string.arguments));
         String uri = bundle.getString(resources.getString(R.string.book_uri));
+        String type = bundle.getString(resources.getString(R.string.model_type));
         bookUri = uri;
+        modelType = type;
         RelativeLayout frameLayout = findViewById(R.id.reading_view_layout);
         textView = (TextView) findViewById(R.id.txt_test);
         coverImageView = (ImageView) findViewById(R.id.cover_image);
@@ -66,8 +76,12 @@ public class BookReaderActivity extends Activity implements AccelerometerListene
         });
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         if (sensorManager != null) {
-            accelerometer = new Accelerometer(sensorManager);
-            accelerometer.setListener(this);
+            springDumper = new Accelerometer(sensorManager);
+            springDumper.setListener(this);
+            hiddenMarkovModel = new HiddenMarkovModel(sensorManager);
+            hiddenMarkovModel.setListener(this);
+            modelList.add(springDumper);
+            modelList.add(hiddenMarkovModel);
         }
     }
 
@@ -96,13 +110,22 @@ public class BookReaderActivity extends Activity implements AccelerometerListene
     @Override
     protected void onResume() {
         super.onResume();
-        accelerometer.enable();
+
+        for(Model model : modelList) {
+            if (model.getTag().equals(modelType)) {
+                model.enable();
+            } else {
+                model.disable();
+            }
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        accelerometer.disable();
+        for(Model model : modelList) {
+            model.disable();
+        }
     }
 
 
@@ -112,7 +135,7 @@ public class BookReaderActivity extends Activity implements AccelerometerListene
         layoutRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                accelerometer.reset();
+                springDumper.reset();
             }
         });
 

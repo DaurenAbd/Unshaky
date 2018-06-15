@@ -24,4 +24,7 @@
     <string name="pref_position_ampl_sum">Resistance of postition to changed caused by velocity</string>
     <string name="pref_position_ampl_def">0.1</string>
     <string name="saved_books_uris">saved_books_uris</string>
+    <string name="model_type">model_type</string>
+    <string name="spring_dumper">Spring-dumper</string>
+    <string name="hidden_markov_model">Hidden Markov Model</string>
 </resources>

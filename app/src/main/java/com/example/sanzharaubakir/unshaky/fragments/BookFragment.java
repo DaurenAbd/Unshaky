@@ -33,24 +33,23 @@ public abstract class BookFragment extends Fragment {
     protected void openBook(final String uri){
 
         saveBookUri(uri);
-        CharSequence options[] = new CharSequence[] {"FolioActivity", "DefaultActivity"};
+        final CharSequence options[] = new CharSequence[] {
+                getResources().getString(R.string.spring_dumper),
+                getResources().getString(R.string.hidden_markov_model)
+        };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Choose how to open the book");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case 0:
-                        break;
-                    case 1:
-                        Bundle bundle = new Bundle();
-                        Resources resources = getResources();
-                        bundle.putString(resources.getString(R.string.book_uri), uri);
-                        Intent intent = new Intent(getContext(), BookReaderActivity.class);
-                        intent.putExtra(resources.getString(R.string.arguments), bundle);
-                        startActivityForResult(intent, Constants.READ_BOOK);
-                }
+                Bundle bundle = new Bundle();
+                Resources resources = getResources();
+                bundle.putString(resources.getString(R.string.book_uri), uri);
+                bundle.putString(resources.getString(R.string.model_type), options[which].toString());
+                Intent intent = new Intent(getContext(), BookReaderActivity.class);
+                intent.putExtra(resources.getString(R.string.arguments), bundle);
+                startActivityForResult(intent, Constants.READ_BOOK);
             }
         });
         builder.show();
