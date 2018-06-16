@@ -14,10 +14,11 @@ import android.widget.TextView;
 
 import com.example.sanzharaubakir.unshaky.R;
 import com.example.sanzharaubakir.unshaky.listeners.OnSwipeTouchListener;
-import com.example.sanzharaubakir.unshaky.models.Model;
 import com.example.sanzharaubakir.unshaky.models.ModelListener;
+import com.example.sanzharaubakir.unshaky.models.UnshakyModel;
 import com.example.sanzharaubakir.unshaky.models.hmm.HiddenMarkovModel;
-import com.example.sanzharaubakir.unshaky.models.sensor.Accelerometer;
+import com.example.sanzharaubakir.unshaky.models.spring_dumper.SpringDumper;
+import com.example.sanzharaubakir.unshaky.sensor.Accelerometer;
 import com.github.mertakdut.BookSection;
 import com.github.mertakdut.Reader;
 import com.github.mertakdut.exception.OutOfPagesException;
@@ -39,11 +40,13 @@ public class BookReaderActivity extends Activity implements ModelListener {
     private View layoutSensor;
     private TextView textView;
     private ImageView coverImageView;
-    private SensorManager sensorManager;
 
-    private Model springDumper;
-    private Model hiddenMarkovModel;
-    private List<Model> modelList = new ArrayList();
+    private SensorManager sensorManager;
+    private Accelerometer accelerometer;
+
+    private UnshakyModel springDumper;
+    private UnshakyModel hiddenMarkovModel;
+    private List<UnshakyModel> modelList = new ArrayList();
 
     private String text;
     private int page = 0;
@@ -76,11 +79,14 @@ public class BookReaderActivity extends Activity implements ModelListener {
         });
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         if (sensorManager != null) {
-            springDumper = new Accelerometer(sensorManager);
+            accelerometer = new Accelerometer(sensorManager);
+
+            springDumper = new SpringDumper(accelerometer);
             springDumper.setListener(this);
-            hiddenMarkovModel = new HiddenMarkovModel(sensorManager);
-            hiddenMarkovModel.setListener(this);
             modelList.add(springDumper);
+
+            hiddenMarkovModel = new HiddenMarkovModel(accelerometer);
+            hiddenMarkovModel.setListener(this);
             modelList.add(hiddenMarkovModel);
         }
     }
@@ -111,7 +117,7 @@ public class BookReaderActivity extends Activity implements ModelListener {
     protected void onResume() {
         super.onResume();
 
-        for(Model model : modelList) {
+        for(UnshakyModel model : modelList) {
             if (model.getTag().equals(modelType)) {
                 model.enable();
             } else {
@@ -123,7 +129,7 @@ public class BookReaderActivity extends Activity implements ModelListener {
     @Override
     protected void onPause() {
         super.onPause();
-        for(Model model : modelList) {
+        for(UnshakyModel model : modelList) {
             model.disable();
         }
     }

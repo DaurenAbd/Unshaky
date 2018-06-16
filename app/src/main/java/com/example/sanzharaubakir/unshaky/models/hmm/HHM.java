@@ -16,6 +16,13 @@ import static java.util.Arrays.asList;
 enum HMM {
     INSTANCE;
 
+    public final static int MIN_DELTA = -20;
+    public final static int MAX_DELTA = 18;
+
+    public final static int MIN_ACC = -22;
+    public final static int MAX_ACC = 28;
+
+
     public final Model<Delta, Acc> model;
 
     HMM() {
