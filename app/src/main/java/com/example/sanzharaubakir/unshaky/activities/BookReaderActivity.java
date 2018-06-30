@@ -16,7 +16,7 @@ import com.example.sanzharaubakir.unshaky.R;
 import com.example.sanzharaubakir.unshaky.listeners.OnSwipeTouchListener;
 import com.example.sanzharaubakir.unshaky.models.ModelListener;
 import com.example.sanzharaubakir.unshaky.models.UnshakyModel;
-import com.example.sanzharaubakir.unshaky.models.hmm.HiddenMarkovModel;
+import com.example.sanzharaubakir.unshaky.models.hmm.MarkovModel;
 import com.example.sanzharaubakir.unshaky.models.spring_dumper.SpringDumper;
 import com.example.sanzharaubakir.unshaky.sensor.Accelerometer;
 import com.github.mertakdut.BookSection;
@@ -85,7 +85,7 @@ public class BookReaderActivity extends Activity implements ModelListener {
             springDumper.setListener(this);
             modelList.add(springDumper);
 
-            hiddenMarkovModel = new HiddenMarkovModel(accelerometer);
+            hiddenMarkovModel = new MarkovModel(accelerometer, getApplicationContext());
             hiddenMarkovModel.setListener(this);
             modelList.add(hiddenMarkovModel);
         }

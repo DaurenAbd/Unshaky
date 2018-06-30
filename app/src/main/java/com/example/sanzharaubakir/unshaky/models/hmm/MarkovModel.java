@@ -1,5 +1,7 @@
 package com.example.sanzharaubakir.unshaky.models.hmm;
 
+import android.content.Context;
+
 import com.example.sanzharaubakir.unshaky.models.UnshakyModel;
 import com.example.sanzharaubakir.unshaky.sensor.Accelerometer;
 import com.example.sanzharaubakir.unshaky.sensor.AccelerometerListener;
@@ -13,28 +15,50 @@ import java.util.Collections;
 import java.util.List;
 
 import io.github.adrianulbona.hmm.Model;
+import io.github.adrianulbona.hmm.ReachableStateFinder;
+import io.github.adrianulbona.hmm.probability.ProbabilityCalculator;
 import io.github.adrianulbona.hmm.solver.MostProbableStateSequenceFinder;
 
-public class HiddenMarkovModel extends UnshakyModel implements AccelerometerListener {
+public class MarkovModel extends UnshakyModel implements AccelerometerListener {
     public static final String TAG = "Hidden Markov Model";
 
-    private final float HMM_COEFFICIENT = 2f;
+    private final float HMM_COEFFICIENT = 10f;
 
     private Accelerometer accelerometer;
 
-    private Model<HMM.Delta, HMM.Acc> model = HMM.INSTANCE.model;
+    private Model<Displacement, Acceleration> model;
+    private MarkovModelDataHolder data;
 
-    private List<List<HMM.Acc>> observables = Arrays.asList(
-            new ArrayList<>(Collections.singletonList(HMM.Acc.ACC_0)),
-            new ArrayList<>(Collections.singletonList(HMM.Acc.ACC_0)));
+    private List<List<Acceleration>> observables;
+    private List<List<Displacement>> evolutions;
 
-    private List<List<HMM.Delta>> evolutions = Arrays.asList(
-            new MostProbableStateSequenceFinder<>(model).basedOn(observables.get(0)),
-            new MostProbableStateSequenceFinder<>(model).basedOn(observables.get(1)));
+    private ProbabilityCalculator<Displacement, Acceleration> probabilityCalculator() {
+        return new ProbabilityCalculator<>(
+                data.getStartingMap()::get,
+                data.getEmissionMap()::get,
+                data.getTransitionMap()::get);
+    }
 
-    public HiddenMarkovModel(Accelerometer accelerometer) {
+    private ReachableStateFinder<Displacement, Acceleration> reachableStatesFinder() {
+        return observation -> data.getReachableStates();
+    }
+
+    public MarkovModel(Accelerometer accelerometer, Context context) {
         super();
+
         this.accelerometer = accelerometer;
+
+        data = MarkovModelDataHolder.getSingleton(context);
+        model = new Model<>(probabilityCalculator(), reachableStatesFinder());
+
+        observables = Arrays.asList(
+                new ArrayList<>(Collections.singletonList(new Acceleration(0))),
+                new ArrayList<>(Collections.singletonList(new Acceleration(0))));
+
+        evolutions = Arrays.asList(
+                new MostProbableStateSequenceFinder<>(model).basedOn(observables.get(0)),
+                new MostProbableStateSequenceFinder<>(model).basedOn(observables.get(1)));
+
         accelerometer.registerListener(this);
     }
 
@@ -69,17 +93,17 @@ public class HiddenMarkovModel extends UnshakyModel implements AccelerometerList
     public void onSensorChanged(long timestamp, @NotNull float[] acc) {
         int order;
         float[] pos = new float[] {0f, 0f, 0f};
-        List<HMM.Delta> evolution;
-        List<HMM.Acc> observable;
+        List<Displacement> evolution;
+        List<Acceleration> observable;
 
         for (int i = 0; i < 2; ++i) {
             observable = observables.get(i);
             evolution = evolutions.get(i);
 
-            order = (int) (Utils.rangeValue(acc[i], -2.2f, 2.8f) * 10f) + 22;
-            observable.add(HMM.Acc.values()[order]);
+            order = (int) (Utils.rangeValue(acc[i], -2.2f, 2.8f) * 10f);
+            observable.add(new Acceleration(order));
 
-            pos[i] = HMM_COEFFICIENT * acc[i] * evolution.get(evolution.size() - 1).ordinal();
+            pos[i] = HMM_COEFFICIENT * evolution.get(evolution.size() - 1).value;
 
             if (Math.abs(pos[i]) < 2f) {
                 pos[i] = 0f;

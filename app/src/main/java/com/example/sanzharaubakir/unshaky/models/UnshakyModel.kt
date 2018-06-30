@@ -1,7 +1,7 @@
 package com.example.sanzharaubakir.unshaky.models
 
 abstract class UnshakyModel {
-    public var listener: ModelListener? = null
+    var listener: ModelListener? = null
 
     abstract fun enable()
 
