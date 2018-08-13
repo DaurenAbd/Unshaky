@@ -14,4 +14,5 @@ abstract class AbstractSensor(private var manager: SensorManager, type: Int) {
     fun unregisterListener(listener: SensorEventListener) {
         manager.unregisterListener(listener, sensor)
     }
+
 }

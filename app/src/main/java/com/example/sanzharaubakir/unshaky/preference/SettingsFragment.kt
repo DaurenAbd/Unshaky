@@ -1,7 +1,7 @@
 package com.example.sanzharaubakir.unshaky.preference
 
-import android.preference.PreferenceFragment
 import android.os.Bundle
+import android.preference.PreferenceFragment
 import com.example.sanzharaubakir.unshaky.R
 
 
