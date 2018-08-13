@@ -1,4 +1,15 @@
 <application>
+  <component name="GitRememberedInputs">
+    <option name="visitedUrls">
+      <list>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/unistars/bereke-Android.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
+      </list>
+    </option>
+    <option name="cloneParentDir" value="$USER_HOME$/Desktop/ProxyPhone/ProxyPhone" />
+  </component>
   <component name="HgRememberedInputs">
     <option name="visitedUrls">
       <list>
